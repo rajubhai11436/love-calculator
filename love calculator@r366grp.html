@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Calculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom right, #ff69b4, #ffc0cb);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            animation: moveWatermark 15s linear infinite;
+        }
+
+        @keyframes moveWatermark {
+            0% {
+                transform: translate(-50%, -50%) translateX(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateX(100vw); /* Move to the right */
+            }
+            100% {
+                transform: translate(-50%, -50%) translateX(0); /* Move back to the start */
+            }
+        }
+
+        .emoji-container {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            font-size: 2rem;
+            animation: float 3s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100%);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-200px);
+                opacity: 0;
+            }
+        }
+
+        .emoji-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark">Raju</div>
+    <div class="container is-max-desktop">
+        <div class="columns is-centered">
+            <div class="column is-6">
+                <div class="box">
+                    <h1 class="title">Love Calculator</h1>
+                    <div class="field">
+                        <label class="label">Name 1</label>
+                        <div class="control">
+                            <input class="input" id="name1" type="text" placeholder="Enter name 1">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Name 2</label>
+                        <div class="control">
+                            <input class="input" id="name2" type="text" placeholder="Enter name 2">
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-primary" id="calculate">Calculate</button>
+                        </div>
+                        <div class="control telegram-button">
+                            <a href="https://t.me/R366grp" target="_blank" class="button is-info">
+                                Telegram Channel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="emoji-wrapper" id="emoji-wrapper"></div>
+    <div class="modal" id="result-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Love Calculator Result</p>
+                <button class="delete" aria-label="close" id="close-modal"></button>
+            </header>
+            <section class="modal-card-body">
+                <p id="result"></p>
+            </section>
+        </div>
+    </div>
+    <script>
+        const emojiWrapper = document.getElementById('emoji-wrapper');
+
+        function createEmoji() {
+            const emoji = document.createElement('div');
+            emoji.textContent = '❤️';
+            emoji.classList.add('emoji-container');
+            emoji.style.left = `${Math.random() * 100}%`;
+            emoji.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            emojiWrapper.appendChild(emoji);
+
+            setTimeout(() => {
+                emoji.remove();
+            }, 3000);
+        }
+
+        setInterval(createEmoji, 300);
+
+        const calculateButton = document.getElementById('calculate');
+        const name1Input = document.getElementById('name1');
+        const name2Input = document.getElementById('name2');
+        const resultModal = document.getElementById('result-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const resultParagraph = document.getElementById('result');
+
+        calculateButton.addEventListener('click', () => {
+            const name1 = name1Input.value;
+            const name2 = name2Input.value;
+            if (name1 === '' || name2 === '') return;
+            const lovePercentage = calculateLovePercentage(name1, name2);
+            resultParagraph.textContent = `The love percentage between ${name1} and ${name2} is ${lovePercentage}%`;
+            resultModal.classList.add('is-active');
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            resultModal.classList.remove('is-active');
+        });
+
+        function calculateLovePercentage(name1, name2) {
+            const combinedName = (name1 + name2).toLowerCase();
+            let sum = 0;
+            for (let i = 0; i < combinedName.length; i++) {
+                sum += combinedName.charCodeAt(i);
+            }
+            return (sum % 100);
+        }
+    </script>
+</body>
+</html>
